@@ -1,0 +1,9 @@
+pkgname=happy-run
+pkgver=0.0.0
+pkgrel=1
+pkgdesc="a run dialog just open favorite directory and file."
+arch=('x86_64' 'i686')
+license=('GPL')
+depends=('qt4')
+makedepends=('tar')
+source=()

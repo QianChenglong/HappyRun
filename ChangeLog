@@ -1,0 +1,22 @@
+2013-09-10  QianChenglong   <qian_cheng_long@163.com>
+
+	* Version 0.0.2
+	* Function:automatic to complete the unique completion
+
+2013-09-09  QianChenglong   <qian_cheng_long@163.com>
+
+	* Function: add configure dialog
+
+
+2013-09-07  QianChenglong   <qian_cheng_long@163.com>
+	* Version 0.0.1
+
+	* Function: add single install
+	            add Escape to avoid quit
+				add complete
+
+
+2013-09-06  QianChenglong   <qian_cheng_long@163.com>
+
+	* Version 0.0.0:Fixed to my lnk dircetory, only use my love file manager
+	to open directory.
