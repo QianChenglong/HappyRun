@@ -9,6 +9,7 @@ LineEdit::LineEdit( QWidget *parent) :
     hasCompleted = false;
 
     completer = new QCompleter(QStringList(), this);
+    // 补全忽略大小写
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);
     connect(completer, SIGNAL(activated(QString)),
@@ -53,7 +54,7 @@ void LineEdit::onCompleterActivated(QString text)
 void LineEdit::onTextChanged()
 {
     int rowCount = completer->completionCount();
-    if (rowCount == 1) {
+    if (rowCount == 1 && hasCompleted == false) {
         setText(completer->currentCompletion());
         completer->setCompletionMode(QCompleter::PopupCompletion);
         hasCompleted = true;
@@ -100,6 +101,10 @@ bool LineEdit::event(QEvent *e)
         case Qt::Key_Return:
         case Qt::Key_Enter:
             hasCompleted = false;
+            QLineEdit::keyPressEvent(keyEvent);
+            break;
+        case Qt::Key_Backspace:
+//            hasCompleted = false;
             QLineEdit::keyPressEvent(keyEvent);
             break;
         default :

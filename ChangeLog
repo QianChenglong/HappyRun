@@ -1,3 +1,8 @@
+2013-11-19  QianChenglong   <qian_cheng_long@163.com>
+
+	* version 1.0.1
+	* Function:当只有一个补全时，自动纠正大小写并补全
+
 2013-09-10  QianChenglong   <qian_cheng_long@163.com>
 
 	* Version 0.0.2

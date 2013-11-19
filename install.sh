@@ -23,7 +23,7 @@ EOF
 }
 
 install() {
-    cp -v "./0-0-2/src/HappyRun" "/bin"
+    cp -v "./src/HappyRun" "/bin"
     # cp -v "HappyRun.desktop" "/etc/xdg/autostart/"
 }
 
@@ -38,7 +38,7 @@ remove() {
 }
 
 if (( $# == 0 )); then
-    make -C 0-0-2/src
+    make -C src
     sudo ./install.sh -u
     exit 0
 fi

@@ -27,8 +27,6 @@ Dialog::Dialog(QWidget *parent) :
 
     lineEdit = new LineEdit;
 
-
-
     layout = new QVBoxLayout;
     layout->addLayout(hBoxLayout);
     layout->addWidget(lineEdit);
@@ -37,7 +35,6 @@ Dialog::Dialog(QWidget *parent) :
     setLayout(layout);
     setTabOrder(this, lineEdit);
     lineEdit->setFocus();
-
 
 //    setShortcuts();
     loadDefaultApp();
