@@ -15,7 +15,7 @@ public:
     void setPaths(const QStringList &paths);
     void loadData();
     QStringList paths() const;
-    bool event(QEvent *e);
+    bool event(QKeyEvent *e);
 
 signals:
 

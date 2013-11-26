@@ -9,7 +9,6 @@ LineEdit::LineEdit( QWidget *parent) :
     hasCompleted = false;
 
     completer = new QCompleter(QStringList(), this);
-    // 补全忽略大小写
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setWrapAround(false);
     connect(completer, SIGNAL(activated(QString)),
@@ -61,15 +60,17 @@ void LineEdit::onTextChanged()
     }
 }
 
-bool LineEdit::event(QEvent *e)
+bool LineEdit::event(QKeyEvent *e)
 {
-    int nextRow;
-    int rowCount;
-    int cRow;
-
     if (e->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(e);
-        switch ( keyEvent->key() ) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
+
+        int key = keyEvent->key();
+        int nextRow;
+        int rowCount;
+        int cRow;
+
+        switch ( key ) {
         case Qt::Key_Tab:
             rowCount = completer->popup()->selectionModel()->model()->rowCount();
             // 若没有补全项，则直接返回
@@ -101,18 +102,32 @@ bool LineEdit::event(QEvent *e)
         case Qt::Key_Return:
         case Qt::Key_Enter:
             hasCompleted = false;
-            QLineEdit::keyPressEvent(keyEvent);
+            QLineEdit::keyPressEvent(e);
             break;
         case Qt::Key_Backspace:
-//            hasCompleted = false;
-            QLineEdit::keyPressEvent(keyEvent);
-            break;
-        default :
-            QLineEdit::keyPressEvent(keyEvent);
+            QString tmp = this->text();
+            if ( tmp.length() == 0 ) {
+                hasCompleted = false;
+            } else {
+                hasCompleted = true;
+            }
+            QLineEdit::keyPressEvent(e);
             break;
         }
+        if ( key > Qt::Key_0 && key < Qt::Key_Z ) {
+            //        hasCompleted = false;
+            QString tmp = this->text();
+            QLineEdit::keyPressEvent(e);
+            rowCount = completer->popup()->selectionModel()->model()->rowCount();
+            if (rowCount == 0) {
+                this->setText(tmp);
+            }
+        } else {
+            //        hasCompleted = false;
+            QLineEdit::keyPressEvent(e);
+        }
+
         return true;
     }
-
-    return QLineEdit::event(e);
+    return QWidget::event(e);
 }
