@@ -1,5 +1,9 @@
 <RCC>
-    <qresource prefix="/">
-        <file>images/setting_48.png</file>
+    <qresource prefix="/"/>
+    <qresource prefix="/sounds">
+        <file>resources/sounds/click.wav</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>resources/images/setting_48.png</file>
     </qresource>
 </RCC>

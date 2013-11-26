@@ -1,2 +1,3 @@
 *.o
 build-HappyRun-Qt_4_8_5-Debug
+moc_*

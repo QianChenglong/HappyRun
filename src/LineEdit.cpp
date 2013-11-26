@@ -6,7 +6,7 @@
 LineEdit::LineEdit( QWidget *parent) :
     QLineEdit(parent)
 {
-    hasCompleted = false;
+    completeFlag = true;
 
     completer = new QCompleter(QStringList(), this);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -53,23 +53,36 @@ void LineEdit::onCompleterActivated(QString text)
 void LineEdit::onTextChanged()
 {
     int rowCount = completer->completionCount();
-    if (rowCount == 1 && hasCompleted == false) {
+    if (rowCount == 1 && completeFlag == true) {
         setText(completer->currentCompletion());
         completer->setCompletionMode(QCompleter::PopupCompletion);
-        hasCompleted = true;
+//        completeFlag = false;
     }
 }
 
-bool LineEdit::event(QKeyEvent *e)
+bool LineEdit::event(QEvent *e)
 {
-    if (e->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
+    if (e->type() != QEvent::KeyPress) {
+        return QWidget::event(e);
+    }
 
-        int key = keyEvent->key();
-        int nextRow;
-        int rowCount;
-        int cRow;
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(e);
 
+    int key = keyEvent->key();
+    int nextRow;
+    int rowCount;
+    int cRow;
+
+    if ( key > Qt::Key_0 && key < Qt::Key_Z ) {
+        QString tmp = this->text();
+        QLineEdit::keyPressEvent(keyEvent);
+        rowCount = completer->popup()->selectionModel()->model()->rowCount();
+        if (rowCount == 0) {
+            emit invalidCharacter();
+            this->setText(tmp);
+        }
+        completeFlag = true;
+    } else {
         switch ( key ) {
         case Qt::Key_Tab:
             rowCount = completer->popup()->selectionModel()->model()->rowCount();
@@ -101,33 +114,25 @@ bool LineEdit::event(QKeyEvent *e)
 
         case Qt::Key_Return:
         case Qt::Key_Enter:
-            hasCompleted = false;
-            QLineEdit::keyPressEvent(e);
+            QLineEdit::keyPressEvent(keyEvent);
             break;
-        case Qt::Key_Backspace:
+        case Qt::Key_Backspace: {
+            QLineEdit::keyPressEvent(keyEvent);
             QString tmp = this->text();
-            if ( tmp.length() == 0 ) {
-                hasCompleted = false;
-            } else {
-                hasCompleted = true;
-            }
-            QLineEdit::keyPressEvent(e);
-            break;
-        }
-        if ( key > Qt::Key_0 && key < Qt::Key_Z ) {
-            //        hasCompleted = false;
-            QString tmp = this->text();
-            QLineEdit::keyPressEvent(e);
             rowCount = completer->popup()->selectionModel()->model()->rowCount();
-            if (rowCount == 0) {
-                this->setText(tmp);
+            if ( tmp.length() == 0 || rowCount > 1) {
+                completeFlag = true;
+            } else {
+                completeFlag = false;
+                QLineEdit::keyPressEvent(keyEvent);
             }
-        } else {
-            //        hasCompleted = false;
-            QLineEdit::keyPressEvent(e);
+            break;
         }
-
-        return true;
+        default:
+            QLineEdit::keyPressEvent(keyEvent);
+            break;
+        }
     }
-    return QWidget::event(e);
+
+    return true;
 }

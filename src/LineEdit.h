@@ -15,9 +15,10 @@ public:
     void setPaths(const QStringList &paths);
     void loadData();
     QStringList paths() const;
-    bool event(QKeyEvent *e);
+    bool event(QEvent *e);
 
 signals:
+    void invalidCharacter();
 
 public slots:
     void onCompleterActivated(QString text);
@@ -26,7 +27,7 @@ public slots:
 private:
     QCompleter *completer;
     QStringList pathsList;
-    bool hasCompleted;
+    bool completeFlag;   // 是否开启唯一补全
 };
 
 #endif // LINEEDIT_H

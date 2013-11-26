@@ -30,6 +30,7 @@ private slots:
     void run();
     void toggle();
     void configure();
+    void onInvalidCharacter();
 
 private:
     void setShortcuts();

@@ -17,7 +17,7 @@ Dialog::Dialog(QWidget *parent) :
     button = new QPushButton();
     connect(button, SIGNAL(clicked()),
             this, SLOT(configure()));
-    button->setIcon(QIcon("://images/setting_48.png"));
+    button->setIcon(QIcon(":/images/resources/images/setting_48.png"));
     button->setMinimumSize(QSize(20, 20));
     button->setMaximumSize(QSize(20, 20));
 
@@ -26,6 +26,8 @@ Dialog::Dialog(QWidget *parent) :
     hBoxLayout->addWidget(button);
 
     lineEdit = new LineEdit;
+    connect(lineEdit, SIGNAL(invalidCharacter()),
+            this, SLOT(onInvalidCharacter()));
 
     layout = new QVBoxLayout;
     layout->addLayout(hBoxLayout);
@@ -124,6 +126,12 @@ void Dialog::configure()
     ConfigDialog *configDialog = new ConfigDialog;
     configDialog->exec();
     lineEdit->loadData();
+}
+
+void Dialog::onInvalidCharacter()
+{
+    qDebug() <<QSound::isAvailable() ;
+    QSound::play("://resources/sounds/click.wav");
 }
 
 //bool Dialog::event(QEvent *e)
