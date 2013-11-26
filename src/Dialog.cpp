@@ -130,7 +130,7 @@ void Dialog::configure()
 
 void Dialog::onInvalidCharacter()
 {
-    qDebug() <<QSound::isAvailable() ;
+//    qDebug() <<QSound::isAvailable() ;
     QSound::play("://resources/sounds/click.wav");
 }
 

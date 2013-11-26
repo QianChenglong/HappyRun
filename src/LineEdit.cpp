@@ -55,7 +55,7 @@ void LineEdit::onTextChanged()
     int rowCount = completer->completionCount();
     if (rowCount == 1 && completeFlag == true) {
         setText(completer->currentCompletion());
-        completer->setCompletionMode(QCompleter::PopupCompletion);
+//        completer->setCompletionMode(QCompleter::PopupCompletion);
 //        completeFlag = false;
     }
 }
@@ -77,9 +77,15 @@ bool LineEdit::event(QEvent *e)
         QString tmp = this->text();
         QLineEdit::keyPressEvent(keyEvent);
         rowCount = completer->popup()->selectionModel()->model()->rowCount();
+        // 若接受该字符后，导致补全项为0,则还原字符串
         if (rowCount == 0) {
             emit invalidCharacter();
             this->setText(tmp);
+            // 重新设置completer的补全前缀，为了弹出补全框
+            completer->setCompletionPrefix(tmp);
+//            qDebug() << completer->popup()->selectionModel()->model()->rowCount();
+            completer->complete();
+
         }
         completeFlag = true;
     } else {
